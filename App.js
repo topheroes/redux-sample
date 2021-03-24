@@ -1,14 +1,54 @@
-import { StatusBar } from 'expo-status-bar';
+
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import {createStore, applyMiddleware} from "redux";
+import {Provider, useDispatch} from "react-redux";
+
+import thunk from "redux-thunk";
+
+import {reducer, initialState} from "./reducer"
+import Counter from "./Counter";
+import {addNumberWithDelay} from "./actions";
+import Label from "./Label";
+
+
+
+
+const store = createStore(reducer, applyMiddleware(thunk));
+
+
+
+
 
 export default function App() {
+
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <Main/>
+    </Provider>
+    
   );
+}
+
+
+const Main = ()=>{
+
+  const dispatch = useDispatch();
+ 
+
+  return (
+  <View style={styles.container}>
+    <Label/>
+    <Counter/>
+    <Text>Hehe</Text>
+    
+    <TouchableOpacity onPress={()=>{dispatch(addNumberWithDelay())}}><Text>Here we go</Text></TouchableOpacity>
+  </View>
+
+  )
+
 }
 
 const styles = StyleSheet.create({
